@@ -1,27 +1,14 @@
-/* ══════════════════════════════════════════
-   CONFIG
-   ══════════════════════════════════════════ */
 
-// ✅ Points to your server.js running on port 3000
-// When you open index.html via http://localhost:3000
 // this calls your server which then calls llm.js
 const SERVER_URL = "/api/chat";
 
-/* ══════════════════════════════════════════
-   STATE
-   ══════════════════════════════════════════ */
+
 const state = { loading: false, serverOk: false };
 
-/* ══════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════ */
+
 document.getElementById('init-ts').textContent = getTime();
 
-// Check if server.js is running when page loads
 
-/* ══════════════════════════════════════════
-   SERVER HEALTH CHECK
-   ══════════════════════════════════════════ */
 // async function checkServer() {
 //   try {
 //     const res = await fetch('/health', { method: 'GET' });
@@ -46,9 +33,6 @@ document.getElementById('init-ts').textContent = getTime();
 // //   document.getElementById('live-dot-el') // leave live dot always green visually
 // }
 
-/* ══════════════════════════════════════════
-   TEXTAREA
-   ══════════════════════════════════════════ */
 const msgEl = document.getElementById('msg');
 
 msgEl.addEventListener('input', () => {
@@ -66,9 +50,6 @@ function useChip(el) {
   msgEl.focus();
 }
 
-/* ══════════════════════════════════════════
-   HELPERS
-   ══════════════════════════════════════════ */
 function getTime() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
@@ -95,9 +76,6 @@ const BOT_AV = `<div class="av-bot">
   </svg>
 </div>`;
 
-/* ══════════════════════════════════════════
-   TEXT FORMATTER
-   ══════════════════════════════════════════ */
 function formatText(text) {
   // Bold: **text**
   text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -123,9 +101,6 @@ function formatText(text) {
   return out || `<p>${text}</p>`;
 }
 
-/* ══════════════════════════════════════════
-   MESSAGE RENDERING
-   ══════════════════════════════════════════ */
 function appendBot(text, isNew = true) {
   const c = document.getElementById('msgs');
   const row = document.createElement('div');
@@ -167,9 +142,7 @@ function hideTyping() {
   if (r) r.remove();
 }
 
-/* ══════════════════════════════════════════
-   CLEAR CHAT
-   ══════════════════════════════════════════ */
+
 function clearChat() {
   const c = document.getElementById('msgs');
   c.innerHTML = `<div class="date-sep">Today</div>
@@ -183,9 +156,6 @@ function clearChat() {
   showToast('Conversation cleared ✓');
 }
 
-/* ══════════════════════════════════════════
-   SEND MESSAGE  →  calls server.js → llm.js
-   ══════════════════════════════════════════ */
 async function sendMsg() {
   const text = msgEl.value.trim();
   if (!text || state.loading) return;
@@ -240,9 +210,6 @@ appendBot(`⚠️ Server connection error. Please try again.`);
   }
 }
 
-/* ══════════════════════════════════════════
-   SPEECH RECOGNITION
-   ══════════════════════════════════════════ */
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isRecording = false;
