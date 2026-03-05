@@ -1,4 +1,4 @@
-import { sendMessage } from "../llm.js";
+import { sendMessage } from "./llm.js";
 
 export default async function handler(req, res) {
 
