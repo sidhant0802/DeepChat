@@ -1,19 +1,25 @@
 import axios from "axios";
-import readlineSync from "readline-sync";
 import dotenv from "dotenv";
-
 dotenv.config();
 
+// ── Shared chat session (persists for the lifetime of the server process)
 const chat = {
   model: "openai/gpt-3.5-turbo",
-  history: []
+  history: [
+    {
+      role: "system",
+      content: `You are DeepChat, a friendly, helpful, and professional AI assistant.
+Keep responses concise and clear.
+When listing multiple options or steps, use a short bullet list.`
+    }
+  ]
 };
 
-async function sendMessage(userProblem) {
-
+// ── Sends a message and returns the assistant reply
+export async function sendMessage(userMessage) {
   chat.history.push({
     role: "user",
-    content: userProblem
+    content: userMessage
   });
 
   const response = await axios.post(
@@ -39,21 +45,3 @@ async function sendMessage(userProblem) {
 
   return reply;
 }
-
-async function main() {
-
-  const userProblem = readlineSync.question("Ask me anything --> ");
-
-  if (userProblem.toLowerCase() === "exit") {
-    console.log("Goodbye!");
-    return;
-  }
-
-  const response = await sendMessage(userProblem);
-
-  console.log(response);
-
-  main();
-}
-
-main();
