@@ -365,18 +365,18 @@ header::after {
   </header>
 
   <!-- Server not running banner -->
-  <div class="server-banner" id="server-banner">
+  <!-- <div class="server-banner" id="server-banner">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
     </svg>
     server.js is not running — start it with <strong style="margin:0 4px">node server.js</strong> then refresh
   </div>
 
-  <!-- Connected badge -->
-  <div class="conn-badge" id="conn-badge">
+ Connected badge -->
+  <!-- <div class="conn-badge" id="conn-badge">
     <div class="conn-dot"></div>
     Connected to server · llm.js active
-  </div>
+  </div> --> 
 
   <!-- MESSAGES -->
   <div class="msgs" id="msgs">
@@ -447,7 +447,7 @@ header::after {
 // ✅ Points to your server.js running on port 3000
 // When you open index.html via http://localhost:3000
 // this calls your server which then calls llm.js
-const SERVER_URL = "/chat";
+const SERVER_URL = "/api/chat";
 
 /* ══════════════════════════════════════════
    STATE
@@ -460,34 +460,33 @@ const state = { loading: false, serverOk: false };
 document.getElementById('init-ts').textContent = getTime();
 
 // Check if server.js is running when page loads
-checkServer();
 
 /* ══════════════════════════════════════════
    SERVER HEALTH CHECK
    ══════════════════════════════════════════ */
-async function checkServer() {
-  try {
-    const res = await fetch('/health', { method: 'GET' });
-    if (res.ok) {
-      setServerOk(true);
-    } else {
-      setServerOk(false);
-    }
-  } catch {
-    // Server not running at all
-    setServerOk(false);
-  }
-}
+// async function checkServer() {
+//   try {
+//     const res = await fetch('/health', { method: 'GET' });
+//     if (res.ok) {
+//       setServerOk(true);
+//     } else {
+//       setServerOk(false);
+//     }
+//   } catch {
+//     // Server not running at all
+//     setServerOk(false);
+//   }
+// }
 
-function setServerOk(ok) {
-  state.serverOk = ok;
-  document.getElementById('server-banner').classList.toggle('show', !ok);
-  document.getElementById('conn-badge').classList.toggle('show', ok);
-  document.getElementById('conn-status').textContent = ok
-    ? 'Online · AI Assistant'
-    : 'Server offline';
-  document.getElementById('live-dot-el') // leave live dot always green visually
-}
+// function setServerOk(ok) {
+//   state.serverOk = ok;
+//   document.getElementById('server-banner').classList.toggle('show', !ok);
+//   document.getElementById('conn-badge').classList.toggle('show', ok);
+//   document.getElementById('conn-status').textContent = ok
+//     ? 'Online · AI Assistant'
+//     : 'Server offline';
+// //   document.getElementById('live-dot-el') // leave live dot always green visually
+// }
 
 /* ══════════════════════════════════════════
    TEXTAREA
@@ -671,7 +670,7 @@ async function sendMsg() {
 
     // Friendly error messages
     if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-      appendBot(`⚠️ Cannot reach server. Make sure you ran:\n\n- node server.js\n\nThen open http://localhost:3000`);
+appendBot(`⚠️ Server connection error. Please try again.`);
       setServerOk(false);
     } else {
       appendBot(`⚠️ ${err.message}`);
